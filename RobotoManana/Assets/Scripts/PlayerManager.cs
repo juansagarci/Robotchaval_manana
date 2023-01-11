@@ -12,15 +12,15 @@ public class PlayerManager : MonoBehaviour
     bool rodando;
     float andando;
 
-    [SerializeField] float fuerzaS;
-    [SerializeField] float fuerzaR;
+    [SerializeField] float fuerzaSalto;
+    [SerializeField] float fuerzaRoll;
 
     Rigidbody2D rb;
-    public float CooldownDuration = 2f;
+    public float CooldownDuration = 1f;
 
-    [SerializeField] float speedW;
-    [SerializeField] float speedR;
-
+    [SerializeField] float speedAndando;
+    [SerializeField] float speedCorriendo;
+    
     bool run;
     bool grounded;
     bool crouch;
@@ -69,8 +69,8 @@ public class PlayerManager : MonoBehaviour
             anim.SetBool("run", false);
             run = false;
 
-            coll.offset = new Vector2(0.432f, 0.905f);
-            coll.size = new Vector2(1.514f, 1.491f);
+            coll.offset = new Vector2(0.43f, 0.9f);
+            coll.size = new Vector2(1.5f, 1.5f);
 
         };
         inputActions.Player.Crouch.canceled += _ =>
@@ -78,8 +78,8 @@ public class PlayerManager : MonoBehaviour
             crouch = false;
             anim.SetBool("crouch", false);
 
-            coll.offset = new Vector2(0.04f, 1.17f);
-            coll.size = new Vector2(0.73f, 2.02f);
+            coll.offset = new Vector2(0.04f, 1.15f);
+            coll.size = new Vector2(0.75f, 2f);
         };
 
         inputActions.Player.Jump.started += _ => Saltar();
@@ -98,8 +98,8 @@ public class PlayerManager : MonoBehaviour
         rodando = false;
         saltando = false;
 
-        fuerzaS = 45;
-        fuerzaR = 55;
+        fuerzaSalto = 45;
+        fuerzaRoll = 55;
 
         run = false;
         crouch = false;
@@ -115,7 +115,7 @@ public class PlayerManager : MonoBehaviour
 
         anim.SetFloat("fall", rb.velocity.y);
 
-        speedR = -20 * (leftStick / -Mathf.Abs(leftStick));
+        speedCorriendo = -20 * (leftStick / -Mathf.Abs(leftStick));
 
         Move();
         Flip();
@@ -131,7 +131,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (!saltando)
         {
-            rb.AddForce(Vector3.up * fuerzaS, ForceMode2D.Impulse);
+            rb.AddForce(Vector3.up * fuerzaSalto, ForceMode2D.Impulse);
             anim.SetBool("IsGrounded", false);
             grounded = false;
             anim.SetTrigger("jump");
@@ -146,7 +146,6 @@ public class PlayerManager : MonoBehaviour
             return;
         }
         anim.SetTrigger("roll");
-        rb.AddForce(Vector3.left * fuerzaR * (leftStick / -Mathf.Abs(leftStick)), ForceMode2D.Impulse);
 
         StartCoroutine(CooldownR());
     }
@@ -160,21 +159,20 @@ public class PlayerManager : MonoBehaviour
                 {
                     if (crouch)
                     {
-                        speedW = 5 * leftStick;
+                        speedAndando = 5 * leftStick;
                         run = false;
                         anim.SetBool("run", false);
                     }
-                    transform.Translate(Vector2.right * speedW * Time.deltaTime);
+                    transform.Translate(Vector2.right * speedAndando * Time.deltaTime);
                     anim.SetBool("run", false);
-                    speedW = 10 * leftStick;
+                    speedAndando = 2 * leftStick;
                 }
             }
 
             else if (run)
             {
-                transform.Translate(Vector2.right * speedR * Time.deltaTime);
+                transform.Translate(Vector2.right * speedCorriendo * Time.deltaTime);
                 anim.SetBool("run", true);
-                anim.SetBool("walk", false);
             }
         }
         else
