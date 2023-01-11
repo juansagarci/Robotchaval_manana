@@ -110,7 +110,7 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetFloat("walk", leftStick);
+        anim.SetFloat("walk", Mathf.Abs(leftStick));
 
 
         anim.SetFloat("fall", rb.velocity.y);
