@@ -13,7 +13,6 @@ public class PlayerManager : MonoBehaviour
     float andando;
 
     [SerializeField] float fuerzaSalto;
-    [SerializeField] float fuerzaRoll;
 
     Rigidbody2D rb;
     public float CooldownDuration = 1f;
@@ -99,7 +98,6 @@ public class PlayerManager : MonoBehaviour
         saltando = false;
 
         fuerzaSalto = 45;
-        fuerzaRoll = 55;
 
         run = false;
         crouch = false;
@@ -115,7 +113,7 @@ public class PlayerManager : MonoBehaviour
 
         anim.SetFloat("fall", rb.velocity.y);
 
-        speedCorriendo = -20 * (leftStick / -Mathf.Abs(leftStick));
+        speedCorriendo = -5 * (leftStick / -Mathf.Abs(leftStick));
 
         Move();
         Flip();
@@ -159,7 +157,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     if (crouch)
                     {
-                        speedAndando = 5 * leftStick;
+                        speedAndando = 1 * leftStick;
                         run = false;
                         anim.SetBool("run", false);
                     }
