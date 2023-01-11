@@ -98,7 +98,7 @@ public class PlayerManager : MonoBehaviour
         rodando = false;
         saltando = false;
 
-        fuerzaS = 75;
+        fuerzaS = 45;
         fuerzaR = 55;
 
         run = false;
